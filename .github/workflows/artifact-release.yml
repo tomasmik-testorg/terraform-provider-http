@@ -7,9 +7,6 @@ on:
         description: "Release tag (v#.#.#)"
         type: string
         required: true
-  push:
-    tags:
-      - 'v*'
 
 permissions:
   contents: write
@@ -20,11 +17,17 @@ jobs:
     uses: opentffoundation/scripts/.github/workflows/release.yml@main
     with:
       tag: ${{ inputs.tag }}
-    secrets: inherit
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GH_PAT: ${{ secrets.GH_PAT }}
+      GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
 
   release-push:
     if: inputs.tag == ''
     uses: opentffoundation/scripts/.github/workflows/release.yml@main
     with:
       tag: ${{ github.ref_name }}
-    secrets: inherit
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GH_PAT: ${{ secrets.GH_PAT }}
+      GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
